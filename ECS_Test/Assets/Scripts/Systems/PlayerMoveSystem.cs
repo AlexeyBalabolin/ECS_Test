@@ -24,7 +24,7 @@ public class PlayerMoveSystem : ComponentSystem
     private void MovePlayer(Transform transform, PlayerMoveComponent playerMoveComponent)
     {
         var pos = transform.position;
-        pos.y += playerMoveComponent.moveSpeed * Time.DeltaTime;
+        pos.y += playerMoveComponent.MoveSpeed * Time.DeltaTime;
         transform.position = pos;
     }
 }
