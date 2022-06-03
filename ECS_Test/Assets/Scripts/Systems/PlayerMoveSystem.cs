@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class PlayerMoveSystem : ComponentSystem
 {
-    private EntityQuery _query; //Запрос для выбора Entity
+    //query for Entity selection
+    private EntityQuery _query;
 
     protected override void OnCreate()
     {
-        //получаем все Entities, у которых есть нужный компонент
-        //ReadOnly - только для чтения, без изменения и удаления компонента
+        //get all Entities with some Component
+        //ReadOnly - without component's changes
         _query = GetEntityQuery(ComponentType.ReadOnly<PlayerMoveComponent>());
     }
 
