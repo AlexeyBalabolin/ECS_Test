@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 6608819968190604749}
   - component: {fileID: 6608819968183405085}
   - component: {fileID: 6608819966897544391}
-  - component: {fileID: 6608819966897544390}
+  - component: {fileID: 8230747304325132007}
+  - component: {fileID: 170475003021343035}
   m_Layer: 0
   m_Name: FreeLichHP
   m_TagString: Untagged
@@ -67,7 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 1
---- !u!114 &6608819966897544390
+--- !u!114 &8230747304325132007
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -76,10 +77,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 6608819968190839213}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09a7f85a41258c34ca1f18c544ae598c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f1efcc8bfe7ba944969eb5c626bf1da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  _speed: 2
+--- !u!114 &170475003021343035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6608819968190839213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc8dca8e2d0b67b44ae3b9143632c905, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6608819968190839217
 GameObject:
   m_ObjectHideFlags: 0

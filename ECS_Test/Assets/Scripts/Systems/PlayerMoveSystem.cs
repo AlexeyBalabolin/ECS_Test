@@ -4,27 +4,29 @@ using UnityEngine;
 public class PlayerMoveSystem : ComponentSystem
 {
     //query for Entity selection
-    private EntityQuery _query;
+    private EntityQuery _moveQuery;
 
     protected override void OnCreate()
     {
-        //get all Entities with some Component
+        //get all Entities with some Components
         //ReadOnly - without component's changes
-        _query = GetEntityQuery(ComponentType.ReadOnly<PlayerMoveComponent>());
+        _moveQuery = GetEntityQuery(ComponentType.ReadOnly<InputData>(), 
+            ComponentType.ReadOnly<MoveData>(),ComponentType.ReadOnly<Transform>());
     }
 
     protected override void OnUpdate()
     {
-        Entities.With(_query).ForEach((Entity entity, Transform transform, PlayerMoveComponent playerMoveComponent) =>
+        Entities.With(_moveQuery).ForEach((Entity entity, Transform transform, ref InputData inputData, ref MoveData moveData) =>
         {
-            MovePlayer(transform, playerMoveComponent);
+            moveData = MovePlayer(transform, inputData, moveData);
         });
     }
 
-    private void MovePlayer(Transform transform, PlayerMoveComponent playerMoveComponent)
+    private MoveData MovePlayer(Transform transform, InputData inputData, MoveData moveData)
     {
-        var pos = transform.position;
-        pos.y += playerMoveComponent.MoveSpeed * Time.DeltaTime;
-        transform.position = pos;
+        var position = transform.position;
+        position += new Vector3(inputData.MoveVector.x, 0, inputData.MoveVector.y) * Time.DeltaTime * moveData.Speed;
+        transform.position = position;
+        return moveData;
     }
 }
