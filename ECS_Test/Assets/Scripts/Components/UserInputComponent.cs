@@ -13,4 +13,6 @@ public class UserInputComponent : MonoBehaviour, IConvertGameObjectToEntity
 public struct InputData:IComponentData
 {
     public float2 MoveVector;
+    public bool IsTeleport;
+    public bool IsShoot;
 }

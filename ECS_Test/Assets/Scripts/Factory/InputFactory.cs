@@ -18,4 +18,10 @@ public static class InputFactory
         var _teleportAction = new InputAction("teleport", binding: "<Gamepad>/select");
         return _teleportAction;
     }
+
+    public static InputAction CreateShootAction()
+    {
+        var _shootAction = new InputAction("shoot", binding: "<Gamepad>/rightTrigger");
+        return _shootAction;
+    }
 }

@@ -18,15 +18,16 @@ public class PlayerMoveSystem : ComponentSystem
     {
         Entities.With(_moveQuery).ForEach((Entity entity, Transform transform, ref InputData inputData, ref MoveData moveData) =>
         {
-            moveData = MovePlayer(transform, inputData, moveData);
+            MovePlayer(transform, inputData, moveData);
         });
     }
 
-    private MoveData MovePlayer(Transform transform, InputData inputData, MoveData moveData)
+    private void MovePlayer(Transform transform, InputData inputData, MoveData moveData)
     {
         var position = transform.position;
         position += new Vector3(inputData.MoveVector.x, 0, inputData.MoveVector.y) * Time.DeltaTime * moveData.Speed;
+        if (inputData.IsTeleport)
+            position += transform.forward * moveData.TeleportDistance;
         transform.position = position;
-        return moveData;
     }
 }
