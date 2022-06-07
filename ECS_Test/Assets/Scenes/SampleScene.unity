@@ -931,6 +931,11 @@ PrefabInstance:
     - target: {fileID: 8230747304325132007, guid: a7e90b65a3a88ad46932a9686f593351,
         type: 3}
       propertyPath: _teleportDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8230747304325132007, guid: a7e90b65a3a88ad46932a9686f593351,
+        type: 3}
+      propertyPath: _teleportRechargeTime
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
