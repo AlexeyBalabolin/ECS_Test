@@ -16,7 +16,10 @@ public class ShootSystem : ComponentSystem
             if (shootData.ShootAction is IAbility shootAbility)
             {
                 if(inputData.IsShoot)
+                {
                     shootAbility.Execute();
+                    inputData.IsShoot = false;
+                }
             }
         });
     }

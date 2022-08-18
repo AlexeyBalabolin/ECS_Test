@@ -11,7 +11,7 @@ public class ShootAbility : MonoBehaviour, IAbility
     {
         if(_canShoot)
         {
-            Instantiate(BulletPrefab?.gameObject, transform.position, transform.rotation);
+            Instantiate(BulletPrefab?.gameObject, transform.position + Vector3.up, transform.rotation);
             _canShoot = false;
             StartCoroutine(Recharge(rechargeTime));
         }

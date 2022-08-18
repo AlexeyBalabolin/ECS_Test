@@ -7,8 +7,8 @@ public class PlayerMoveSystem : ComponentSystem
 {
     //query for Entity selection
     private EntityQuery _moveQuery;
-    private bool _isTeleport = true;
-    private float _teleportTimer = 0;
+    private bool _canTeleport;
+    private float _teleportTimer;
 
     protected override void OnCreate()
     {
@@ -16,53 +16,60 @@ public class PlayerMoveSystem : ComponentSystem
         //ReadOnly - without component's changes
         _moveQuery = GetEntityQuery(ComponentType.ReadOnly<InputData>(), 
             ComponentType.ReadOnly<MoveData>(),ComponentType.ReadOnly<Transform>());
+        _canTeleport = true;
+        _teleportTimer = 0;
     }
 
     protected override void OnUpdate()
     {
-        Entities.With(_moveQuery).ForEach((Entity entity, Transform transform,
+        Entities.With(_moveQuery).ForEach((Entity entity, CharacterController characterController,
             ref InputData inputData, ref MoveData moveData) =>
         {
-            MovePlayer(transform, inputData, moveData);
-            TeleportPlayer(transform, inputData, moveData);
+            MovePlayer(characterController, inputData, moveData);
+            TeleportPlayer(characterController.transform,ref inputData, moveData);
         });
     }
 
-    private void MovePlayer(Transform transform, InputData inputData, MoveData moveData)
+    private void MovePlayer(CharacterController characterController, InputData inputData, MoveData moveData)
+    {
+        var position = new Vector3(inputData.MoveVector.x, 0, inputData.MoveVector.y) * Time.DeltaTime * moveData.Speed;
+        
+        characterController.Move(position);
+        if (inputData.MoveVector.x!=0 || inputData.MoveVector.y!=0)
+            characterController.transform.forward = new Vector3(inputData.MoveVector.x, 0, inputData.MoveVector.y);
+    }
+
+    private void TeleportPlayer(Transform transform, ref InputData inputData, MoveData moveData)
+    {
+        if (inputData.IsTeleport)
+        {
+            if(_canTeleport)
+            {
+                UpdatePlayerPosition(transform, moveData);
+                _canTeleport = false;
+            }
+            inputData.IsTeleport = false;
+        }
+        if(!_canTeleport)
+        {
+            RechargeTeleport(moveData);
+        }
+    }
+
+    private void UpdatePlayerPosition(Transform transform, MoveData moveData)
     {
         var position = transform.position;
-        position += new Vector3(inputData.MoveVector.x, 0, inputData.MoveVector.y) * Time.DeltaTime * moveData.Speed;
+        position += transform.forward * moveData.TeleportDistance;
         transform.position = position;
-        if (inputData.MoveVector.x!=0 && inputData.MoveVector.y!=0)
-            transform.forward = new Vector3(inputData.MoveVector.x, 0, inputData.MoveVector.y);
     }
 
-    private void TeleportPlayer(Transform transform, InputData inputData, MoveData moveData)
+    private void RechargeTeleport(MoveData moveData)
     {
-        if(inputData.IsTeleport)
+        _teleportTimer += Time.DeltaTime;
+        if (_teleportTimer >= moveData.TeleportRechargeTime)
         {
-            if (_isTeleport)
-            {
-                var position = transform.position;
-                position += transform.forward * moveData.TeleportDistance;
-                transform.position = position;
-                _isTeleport = false;               
-            }
+            _canTeleport = true;
+            _teleportTimer = 0;
         }
-        if(!_isTeleport)
-        {
-            _teleportTimer += Time.DeltaTime;
-            if (_teleportTimer >= moveData.TeleportRechargeTime)
-            {
-                _isTeleport = true;
-                _teleportTimer = 0;
-            }
-        }
-    }
-
-    private IEnumerator RechargeTeleport(float time)
-    {
-        yield return new WaitForSeconds(time);
-        _isTeleport = true;
     }
 }
