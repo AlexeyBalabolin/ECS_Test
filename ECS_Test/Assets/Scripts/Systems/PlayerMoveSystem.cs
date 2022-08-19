@@ -22,7 +22,7 @@ public class PlayerMoveSystem : ComponentSystem
 
     protected override void OnUpdate()
     {
-        Entities.With(_moveQuery).ForEach((Entity entity, Transform characterController,
+        Entities.With(_moveQuery).ForEach((Entity entity, CharacterController characterController,
             ref InputData inputData, ref MoveData moveData) =>
         {
             MovePlayer(characterController, inputData, moveData);
@@ -30,21 +30,23 @@ public class PlayerMoveSystem : ComponentSystem
         });
     }
 
-    private void MovePlayer(Transform characterController, InputData inputData, MoveData moveData)
+    private void MovePlayer(CharacterController characterController, InputData inputData, MoveData moveData)
     {
         var position = new Vector3(inputData.MoveVector.x, 0, inputData.MoveVector.y) * Time.DeltaTime * moveData.Speed;
-        characterController.position += position;
+        characterController.Move(position);
         if (inputData.MoveVector.x!=0 || inputData.MoveVector.y!=0)
             characterController.transform.forward = new Vector3(inputData.MoveVector.x, 0, inputData.MoveVector.y);
     }
 
-    private void TeleportPlayer(Transform characterController, ref InputData inputData, MoveData moveData)
+    private void TeleportPlayer(CharacterController characterController, ref InputData inputData, MoveData moveData)
     {
         if (inputData.IsTeleport)
         {
             if(_canTeleport)
             {
+                characterController.enabled = false;
                 UpdatePlayerPosition(characterController.transform, moveData);
+                characterController.enabled = true;
                 _canTeleport = false;
             }
             inputData.IsTeleport = false;
